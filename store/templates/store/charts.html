@@ -1,0 +1,57 @@
+<div class="row">
+  <div class="card shadow border-0 mb-7 col-md-6 col-lg-6">
+      <div class="bg-white">
+        <canvas id="productStockChart" style="width:100%;max-width:600px"></canvas>
+          <script>
+            var xValues = ["Shampoos and Conditioners", "Soaps and Gels", "Body Care", "Waxes", "Dental Kits", "Vanity Kits"];
+            var yValues = [150, 120, 180, 90, 60, 30]; // Update these values according to your data
+            var barColors = ["#b91d47", "#00aba9", "#2b5797", "#e8c3b9", "#1e7145", "#c1c1c1"];
+
+            new Chart("productStockChart", {
+              type: "bar",
+              data: {
+                labels: xValues,
+                datasets: [{
+                  backgroundColor: barColors,
+                  data: yValues
+                }]
+              },
+              options: {
+                title: {
+                  display: true,
+                  text: "Product Stock Levels"
+                }
+              }
+            });
+          </script>
+      </div>
+  </div>
+  <div class="card shadow border-0 mb-7 col-md-6 col-lg-6">
+    <small><b>Sales Orders Trend</b></small>
+    <canvas id="salesOrdersChart" style="width:100%;max-width:600px"></canvas>
+      <script>
+      var xValues = ["January", "February", "March", "April", "May"];
+      var yValues = [15, 20, 25, 30, 40];
+
+      new Chart("salesOrdersChart", {
+        type: "line",
+        data: {
+          labels: xValues,
+          datasets: [{
+            fill: false,
+            lineTension: 0,
+            backgroundColor: "rgba(0,0,255,1.0)",
+            borderColor: "rgba(0,0,255,0.1)",
+            data: yValues
+          }]
+        },
+        options: {
+          legend: {display: false},
+          scales: {
+            yAxes: [{ticks: {min: 0, max:50}}],
+          }
+        }
+      });
+      </script>
+  </div>
+</div>

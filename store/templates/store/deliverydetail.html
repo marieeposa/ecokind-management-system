@@ -1,0 +1,46 @@
+{% extends "store/base.html" %}
+{% load static %}
+{% block title %}Delivery Details{% endblock title %}
+{% block content %}
+<div class="container">
+    <h1>Delivery Details</h1>
+    <table class="table table-bordered">
+        <tr>
+            <th>Company</th>
+            <td>{{ delivery.company }}</td>
+        </tr>
+        <tr>
+            <th>Contact Number</th>
+            <td>{{ delivery.contact_number }}</td>
+        </tr>
+        <tr>
+            <th>Email Address</th>
+            <td>{{ delivery.email_address }}</td>
+        </tr>
+        <tr>
+            <th>Street</th>
+            <td>{{ delivery.street }}</td>
+        </tr>
+        <tr>
+            <th>Barangay</th>
+            <td>{{ delivery.barangay }}</td>
+        </tr>
+        <tr>
+            <th>City</th>
+            <td>{{ delivery.city }}</td>
+        </tr>
+        <tr>
+            <th>Zip Code</th>
+            <td>{{ delivery.zip_code }}</td>
+        </tr>
+        <tr>
+            <th>Province</th>
+            <td>{{ delivery.province }}</td>
+        </tr>
+        <tr>
+            <th>Country</th>
+            <td>{{ delivery.country }}</td>
+        </tr>
+    </table>
+</div>
+{% endblock content %}
