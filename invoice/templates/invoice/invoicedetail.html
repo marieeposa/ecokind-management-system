@@ -1,0 +1,135 @@
+<!-- invoice/templates/invoice/invoice_detail.html -->
+{% extends 'store/base.html' %}
+{% block title %}Invoice Detail{% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Order Confirmation</title>
+<meta name="robots" content="noindex,nofollow" />
+<meta name="viewport" content="width=device-width; initial-scale=1.0;" />
+<style>
+  @import "compass/css3";
+  .invoice-container {
+    display: block;
+    margin: 50px auto;
+    width: 70%;
+    background-color: #fff;
+    font-family: 'Arial', sans-serif;
+    padding: 20px;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  .invoice-header {
+    margin-bottom: 40px;
+    text-align: center;
+  }
+  .invoice-header h1 {
+    margin: 0;
+    font-size: 36px;
+    color: #28a745;
+    font-weight: bold;
+  }
+  .invoice-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .invoice-info p {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+  }
+  .invoice-details, .invoice-totals {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .invoice-details th, .invoice-details td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  .invoice-details th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+  }
+  .invoice-totals th, .invoice-totals td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  .invoice-totals th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+  }
+  .invoice-totals td.amount {
+    text-align: right;
+  }
+  .btn-print {
+    text-align: center;
+    margin: 30px 0;
+  }
+  .btn-back {
+    text-align: center;
+    margin: 30px 0;
+  }
+</style>
+<div class="btn-print">
+  <a class="btn btn-success btn-sm" onclick="window.print()"><i class="fa fa-print"></i> Print</a>
+</div>
+<div class="invoice-container">
+  <!-- Header -->
+  <div class="invoice-header">
+    <h1>Ecokind</h1>
+  </div>
+  <!-- Invoice Information -->
+  <div class="invoice-info">
+    <div>
+      <p>Customer Name: {{ invoice.sale.customer_id.first_name }} {{ invoice.sale.customer_id.last_name }}</p>
+      <p>Invoice Number: {{ invoice.id }}</p>
+    </div>
+    <div>
+      <p>Sales Order Number: #{{ invoice.sale.id }}</p>
+      <p>Date Issued: {{ invoice.date }}</p>
+    </div>
+  </div>
+  <!-- Order Details -->
+  <div class="invoice-details">
+    <table width="100%">
+      <tr>
+        <th width="40%">Item</th>
+        <th width="15%">Quantity</th>
+        <th width="15%">Unit Price</th>
+        <th width="20%">Total</th>
+      </tr>
+      {% for item in items %}
+      <tr>
+        <td>{{ item.item.name }}</td>
+        <td align="center">{{ item.quantity }}</td>
+        <td>Php {{ item.selling_price }}</td>
+        <td>Php {{ item.subtotal }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  <!-- Totals -->
+  <div class="invoice-totals">
+    <table width="100%">
+      <tr>
+        <th>Subtotal</th>
+        <td class="amount">Php {{ subtotal }}</td>
+      </tr>
+      <tr>
+        <th>Shipping Fee</th>
+        <td class="amount">Php {{ invoice.sale.shipping_fee }}</td>
+      </tr>
+      <tr>
+        <th><strong>Total Amount Due</strong></th>
+        <td class="amount"><strong>Php {{ invoice.sale.total_amount_due }}</strong></td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div class="btn-back">
+  <a class="btn btn-secondary btn-sm" href="{% url 'generate-invoice' %}"><i class="fa fa-arrow-left"></i> Back</a>
+</div>
+{% endblock %}

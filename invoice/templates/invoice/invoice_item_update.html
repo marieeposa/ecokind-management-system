@@ -1,0 +1,41 @@
+{% extends "store/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Update Invoice Item{% endblock title %}
+
+{% block content %}
+<div class="col container p-5">
+    <div class="row">
+        <div class="col-md-3 col-lg-3"></div>
+        <div class="col-md-6 col-lg-6">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <section class="section-bg" id="plans">
+                    <fieldset class="form-group">
+                        <header class="section-header">
+                            <h1 class="text-success">Edit Invoice Item</h1>
+                            <hr>
+                        </header>
+                        <div class="item-fields" style="margin-bottom: 10px;">
+                            <select name="item" class="form-control mb-2" required>
+                                {% for item in form.fields.item.queryset %}
+                                <option value="{{ item.id }}" {% if form.instance.item.id == item.id %}selected{% endif %}>{{ item.name }}</option>
+                                {% endfor %}
+                            </select>
+                            {{ form.price_per_item|as_crispy_field }}
+                            {{ form.quantity|as_crispy_field }}
+                        </div>
+                    </fieldset>
+                </section>
+                <div class="form-group mt-4 text-center">
+                    <button class="btn btn-success" type="submit">Update</button>
+                    <a class="btn btn-outline-secondary" href="{% url 'view_invoice_items' invoice_id=form.instance.invoice.invoice_id %}">Cancel</a>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-3 col-lg-3"></div>
+    </div>
+</div>
+{% endblock content %}
+

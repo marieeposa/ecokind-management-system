@@ -1,0 +1,47 @@
+{% extends "store/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Add Items to Invoice{% endblock %}
+
+{% block content %}
+<div class="col container p-5">
+    <div class="row">
+        <div class="col-md-3 col-lg-3"></div>
+        <div class="col-md-6 col-lg-6">
+            <form method="POST" enctype="multipart/form-data" action="{% url 'invoice-item-create' invoice_id=invoice.invoice_id %}">
+                {% csrf_token %}
+                <section class="section-bg" id="plans">
+                    <fieldset class="form-group">
+                        <header class="section-header">
+                            <h1 class="text-success">Add Item to Invoice #{{ invoice.invoice_id }}</h1>
+                            <hr>
+                        </header>
+                        <div id="item-fields-container">
+                            <div class="item-fields" style="margin-bottom: 10px;">
+                                <select name="item" class="form-control mb-2" required>
+                                    {% for item in items %}
+                                    <option value="{{ item.id }}">{{ item.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <input type="number" name="price_per_item" placeholder="Price per Item" class="form-control mb-2" step="0.01" required>
+                                <input type="number" name="quantity" placeholder="Quantity" class="form-control mb-2" required>
+                            </div>
+                        </div>
+                    </fieldset>
+                </section>
+                <div class="form-group mt-4 text-center">
+                    <button class="btn btn-success" type="submit">Save Item</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-3 col-lg-3"></div>
+    </div>
+</div>
+{% endblock content %}
+
+
+
+
+
+
