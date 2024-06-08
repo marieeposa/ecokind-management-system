@@ -1,0 +1,63 @@
+{% extends "store/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Sales Order Items{% endblock title %}
+
+{% block content %}
+<div class="col container p-5">
+  <div>
+    <a class="btn btn-sm btn-success" href="{% url 'saleslist' %}">Back to Sales List</a>
+    <a class="btn btn-sm" style="background-color: DodgerBlue; color: white;" href="{% url 'sales-order-detail-add' sale_id=sale.id %}">Add Item</a>
+  </div>
+  <h2 class="mt-3">Items for Sales Order #{{ sale.id }}</h2>
+  <div class="m-2">
+    <table class="table table-sm table-responsive">
+      <thead>
+        <tr class="table-success">
+          <th scope="col">ID</th>
+          <th scope="col">Item Description</th>
+          <th scope="col">Selling Price</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Subtotal</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for detail in order_details %}
+        <tr>
+          <td>{{ detail.id }}</td>
+          <td>{{ detail.item.name }} - {{ detail.description }}</td>
+          <td>{{ detail.selling_price }}</td>
+          <td>{{ detail.quantity }}</td>
+          <td>{{ detail.subtotal }}</td>
+          <td>
+            <a class="text-info" href="{% url 'sales-order-detail-edit' sale_id=sale.id pk=detail.id %}"><i class="fa-solid fa-pen"></i></a>
+            <a class="text-danger float-end" href="{% url 'sales-order-detail-delete' sale_id=sale.id pk=detail.id %}"><i class="fa-solid fa-trash"></i></a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="paginator">
+    {% if order_details.paginator.num_pages > 1 %}
+    <ul class="pagination">
+      {% if order_details.has_previous %}
+      <li><a class="btn btn-sm accent-1 btn-outline-success" href="?page={{ order_details.previous_page_number }}">&laquo;</a></li>
+      {% endif %}
+      {% for i in order_details.paginator.page_range %}
+      {% if order_details.number == i %}
+      <li class="active"><span class="btn btn-sm btn-success">{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+      <li><a href="?page={{ i }}" class="btn btn-sm btn-outline-success">{{ i }}</a></li>
+      {% endif %}
+      {% endfor %}
+      {% if order_details.has_next %}
+      <li><a href="?page={{ order_details.next_page_number }}" class="btn btn-sm btn-outline-success">&raquo;</a></li>
+      {% endif %}
+    </ul>
+    {% endif %}
+  </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,236 @@
+{% extends "store/base.html" %}
+{% load static %}
+
+{% block title %}Transaction Detail{% endblock %}
+
+{% block content %}
+<style>
+  section .receipt {
+    margin: 0 auto;
+    font-size: 12px;
+    position: relative;
+    font-family: 'courier';
+    max-width: 320px;
+    background: #e6e6e6;
+  }
+  .serif {
+    font-family: serif;
+  }
+  .sans-serif {
+    font-family: 'sans-serif';
+  }
+  .bold {
+    font-weight: 700;
+  }
+  .x-bold {
+    font-weight: 900;
+    text-shadow: 0px 0px 1px #000;
+  }
+  .small-font {
+    font-size: 10px; /* Smaller font size for specific text */
+  }
+  .hr, .hr-sm, .hr-lg {
+    border-bottom: 1.5px dashed #333;
+    margin: 10px 0;
+  }
+  .hr-sm {
+    width: 30%;
+    float: right;
+  }
+  .hr-lg {
+    width: 100%;
+  }
+  .col2 {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .container-ticket {
+    background: #dff0d8;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 50px 0;
+    box-sizing: border-box;
+  }
+  .container-ticket .ticket {
+    cursor: default;
+    position: relative;
+    width: 320px;
+    padding: 10px 20px;
+    background: #fff url(https://static.licdn.com/scds/common/u/images/apps/payments/textures/texture_paper_304x128_v1.png);
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, .1);
+  }
+  .container-ticket .ticket .head-ticket {
+    text-align: center;
+    padding: 0px 17px;
+  }
+  .container-ticket .ticket .head-ticket p {
+    font-size: 14px;
+  }
+  .container-ticket .ticket .head-ticket p:nth-child(1) {
+    font-size: 18px;
+  }
+  .container-ticket .ticket .head-ticket .code-barre {
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+  }
+  .container-ticket .ticket .head-ticket .code-barre span {
+    height: 100%;
+    display: inline-block;
+    background: #333;
+  }
+  .container-ticket .ticket .head-ticket .code-barre span:nth-child(odd) {
+    width: 7px;
+    margin-right: 2px;
+  }
+  .container-ticket .ticket .head-ticket .code-barre span:nth-child(even) {
+    width: 3px;
+    margin-right: 1px;
+  }
+  .container-ticket .ticket .body-ticket .produits {
+    margin: 30px 0;
+  }
+  .container-ticket .ticket .body-ticket .carte {
+    text-align: justify;
+    text-align-last: center;
+  }
+  .container-ticket .ticket .body-ticket .carte .title-carte {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -2px;
+  }
+  .container-ticket .ticket .footer-ticket {
+    padding: 0px 17px;
+  }
+  .container-ticket .ticket .footer-ticket .title-footer {
+    font-size: 16px;
+    font-weight: 900;
+    text-shadow: 0px 1px 0px rgba(0, 0, 0, .5);
+    text-align: center;
+    letter-spacing: 2px;
+  }
+  .container-ticket .ticket .invoice-details table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+  .container-ticket .ticket .invoice-details th, .container-ticket .ticket .invoice-details td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+    word-wrap: break-word;
+  }
+  .container-ticket .ticket .invoice-details th {
+    background-color: #f5f5f5;
+  }
+  .container-ticket .ticket .invoice-details td {
+    text-align: right;
+  }
+  .container-ticket .ticket .invoice-details td:first-child, .container-ticket .ticket .invoice-details th:first-child {
+    text-align: left;
+    width: 40%;
+  }
+  .container-ticket .ticket .invoice-details td:nth-child(2) {
+    text-align: left;
+  }
+</style>
+<div class="container-ticket">
+  <div class="ticket">
+    <div class="head-ticket">
+      <p class="x-bold">Ecokind Hotel and Restaurant Supplies</p>
+      <p class="bold">126 V Luna Extension, Diliman, Quezon City</p>
+      <p class="bold">Tel: 0976 215 6579</p>
+      <br>
+      <p>Date: {{ sale.order_date|date:"Y/m/d" }}</p>
+      <p>Receipt Code: SO #{{ sale.id }}</p>
+      <div class="code-barre">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+    <div class="body-ticket">
+      <div class="produits">
+        <p><strong>Order Type:</strong> {{ sale.order_type }}</p>
+        <p><strong>Order Status:</strong> {{ sale.sales_order_status }}</p>
+        <p><strong>Payment Type:</strong> {{ sale.payment_type }}</p>
+        <p><strong>Payment Status:</strong> {{ sale.payment_status }}</p>
+      </div>
+      <div class="carte">
+        <p><strong>Customer:</strong> {{ sale.customer_id.first_name }} {{ sale.customer_id.last_name }}</p>
+        <p><strong>Logistics:</strong> {{ sale.logistics_id.company }}</p>
+        <p><strong>Served by:</strong> {{ sale.created_by.username }}</p>
+      </div>
+      <div class="hr-lg"></div>
+      <div class="invoice-details">
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>QTY</th>
+              <th>SP</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in sale_details %}
+            <tr>
+              <td style="font-size: 11px;">{{ item.item.name }} - {{ item.description }}</td>
+              <td style="font-size: 11px;">{{ item.quantity }}</td>
+              <td style="font-size: 11px;">{{ item.selling_price }}</td>
+              <td style="font-size: 11px;">{{ item.subtotal }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+              <td colspan="3" class="bold" style="font-size: 12px;">Total Amount Due</td>
+              <td class="bold" style="font-size: 12px;">{{ calculated_total_due }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="footer-ticket">
+      <p class="small-font" style="text-align: center;">This serves as an official receipt</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

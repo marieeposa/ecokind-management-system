@@ -1,0 +1,73 @@
+<!-- transactions/templates/transactions/purchases_list.html -->
+{% extends "store/base.html" %}
+{% load static %}
+
+{% block title %}Purchase Orders{% endblock title %}
+{% block content %}
+<div class="col container p-5">
+  <div class="d-flex justify-content-between align-items-center">
+    <a class="btn btn-sm btn-success" href="{% url 'purchases_create' %}">Add Purchase Order</a>
+    <a class="float-end btn btn-sm btn-success" href="?_export=xlsx">
+      <i class="fa-solid fa-download"></i> Export to Excel
+    </a>
+  </div>
+  <div class="m-2">
+    <table class="table table-sm table-responsive">
+      <thead>
+        <tr class="table-success">
+          <th scope="col">ID</th>
+          <th scope="col">Supplier</th>
+          <th scope="col">Order Date</th>
+          <th scope="col">Delivery Date</th>
+          <th scope="col">Delivery Status</th>
+          <th scope="col">Total Amount Due</th>
+          <th scope="col">Payment Method</th>
+          <th scope="col">Payment Status</th>
+          <th scope="col">Items</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for purchase in purchase_orders %}
+        <tr>
+          <th scope="row">{{ purchase.purchase_order_id }}</th>
+          <td><a href="{% url 'purchases_detail' purchase.pk %}">{{ purchase.supplier_id.id }} - {{ purchase.supplier_id.name }}</a></td>
+          <td>{{ purchase.order_date }}</td>
+          <td>{{ purchase.delivery_date }}</td>
+          <td>{{ purchase.delivery_status }}</td>
+          <td>{{ purchase.total_due }}</td>
+          <td>{{ purchase.payment_method }}</td>
+          <td>{{ purchase.payment_status }}</td>
+          <td><a href="{% url 'purchases_detail_view' purchase.pk %}">{{ purchase.item_count }}</a></td>
+          <td>
+            <a class="text-info" href="{% url 'purchases_update' purchase.pk %}"><i class="fa-solid fa-pen"></i></a>
+            <a class="text-danger float-end" href="{% url 'purchases_delete' purchase.pk %}"><i class="fa-solid fa-trash"></i></a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="paginator">
+    {% if is_paginated %}
+    <ul class="pagination">
+      {% if page_obj.has_previous %}
+      <li><a class="btn btn-sm accent-1 btn-outline-success" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+      {% endif %}
+      {% for i in paginator.page_range %}
+      {% if page_obj.number == i %}
+      <li class="active"><span class="btn btn-sm btn-success">{{ i }} <span class="sr-only">(current)</span></li>
+      {% else %}
+      <li><a href="?page={{ i }}" class="btn btn-sm btn-outline-success">{{ i }}</a></li>
+      {% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+      <li><a href="?page={{ page_obj.next_page_number }}" class="btn btn-sm btn-outline-success">&raquo;</a></li>
+      {% else %}
+      <li class="disabled"><span class="btn btn-sm btn-outline-success">&raquo;</span></li>
+      {% endif %}
+    </ul>
+    {% endif %}
+  </div>
+</div>
+{% endblock content %}

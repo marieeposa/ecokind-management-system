@@ -1,0 +1,121 @@
+<!-- transactions/templates/transactions/purchasedetail.html -->
+{% extends 'store/base.html' %}
+{% block title %}Purchase Order Detail{% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="robots" content="noindex,nofollow" />
+<meta name="viewport" content="width=device-width; initial-scale=1.0;" />
+<style>
+  .purchase-order-container {
+    display: block;
+    margin: 20px auto;
+    width: 80%;
+    background-color: #fff;
+    font-family: 'Arial', sans-serif;
+    padding: 20px;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  .purchase-order-header {
+    margin-bottom: 40px;
+    text-align: center;
+  }
+  .purchase-order-header h1 {
+    margin: 0;
+    font-size: 24px;
+    color: #000;
+    font-weight: bold;
+  }
+  .purchase-order-info {
+    margin-bottom: 20px;
+  }
+  .purchase-order-info p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #555;
+  }
+  .purchase-order-details {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .purchase-order-details th, .purchase-order-details td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  .purchase-order-details th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+  }
+  .purchase-order-actions {
+    text-align: center;
+    margin: 20px 0;
+  }
+  .purchase-order-actions a {
+    margin: 0 10px;
+  }
+  .purchase-order-footer {
+    margin-top: 40px;
+    text-align: right;
+  }
+</style>
+<div class="purchase-order-container">
+  <!-- Header -->
+  <div class="purchase-order-header">
+    <h1>Purchase Order Detail</h1>
+  </div>
+  <!-- Back Button at the Top -->
+  <div class="purchase-order-footer" style="text-align: left; margin-bottom: 20px;">
+    <a class="btn btn-sm btn-primary" href="{% url 'purchases_list' %}"><i class="fa fa-arrow-left"></i> Back to Purchase Orders</a>
+  </div>
+  <!-- Purchase Order Information -->
+  <div class="purchase-order-info">
+    <p><strong>ID:</strong> {{ purchase_order.purchase_order_id }}</p>
+    <p><strong>Supplier:</strong> {{ purchase_order.supplier_id }}</p>
+    <p><strong>Order Date:</strong> {{ purchase_order.order_date }}</p>
+    <p><strong>Delivery Date:</strong> {{ purchase_order.delivery_date }}</p>
+    <p><strong>Delivery Status:</strong> {{ purchase_order.delivery_status }}</p>
+    <p><strong>Total Amount Due:</strong> {{ purchase_order.total_amount_due }}</p>
+    <p><strong>Payment Method:</strong> {{ purchase_order.payment_method }}</p>
+    <p><strong>Payment Status:</strong> {{ purchase_order.payment_status }}</p>
+    <p><strong>Items:</strong> {{ purchase_order.items }}</p>
+  </div>
+  <!-- Order Details -->
+  <div class="purchase-order-details">
+    <table width="100%">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Item / Description</th>
+          <th>QTY</th>
+          <th>UNIT</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in purchase_order.purchaseorderdetail_set.all %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ item.item.name }} - {{ item.description }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>{{ item.unit_price }}</td>
+          <td>{{ item.unit_price }}</td>
+          <td>{{ item.subtotal }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <!-- Actions -->
+  <div class="purchase-order-actions">
+    <a class="btn btn-primary btn-sm" href="{% url 'purchases_update' purchase_order.pk %}">Edit</a>
+    <a class="btn btn-danger btn-sm" href="{% url 'purchases_delete' purchase_order.pk %}">Delete</a>
+  </div>
+  <!-- Back Button at the Bottom -->
+  <div class="purchase-order-footer">
+    <a class="btn btn-sm btn-primary mt-3" href="{% url 'purchases_list' %}"><i class="fa fa-arrow-left"></i> Back to Purchase Orders</a>
+  </div>
+</div>
+{% endblock %}

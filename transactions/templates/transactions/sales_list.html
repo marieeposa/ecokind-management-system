@@ -1,0 +1,129 @@
+<!-- sales_list.html -->
+{% extends "store/base.html" %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% load querystring from django_tables2 %}
+
+{% block title %}Sales{% endblock title %}
+
+{% block content %}
+<div class="col container p-5">
+    <style>
+        input[type="text"], select {
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            display: inline-block;
+            padding: 6px 20px;
+            margin: 8px 0;
+        }
+        button[type="submit"] {
+            padding: 4px 20px;
+            margin: 8px 0;
+        }
+        .payment-status-paid {
+            background-color: darkgreen !important;
+            color: white !important;
+            padding: 5px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .payment-status-unpaid {
+            background-color: red !important;
+            color: white !important;
+            padding: 5px;
+            border-radius: 4px;
+            text-align: center;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const updateLinks = document.querySelectorAll('.update-link');
+
+            updateLinks.forEach(link => {
+                link.addEventListener('click', function (event) {
+                    const paymentStatus = this.dataset.paymentStatus;
+                    if (paymentStatus === 'Paid') {
+                        event.preventDefault();
+                        alert('Error: Cannot update a sale with payment status "Paid".');
+                    }
+                });
+            });
+        });
+    </script>
+    <div>
+        <a class="btn btn-sm btn-success" href="{% url 'sale-create' %}">Add Sale Order</a>
+        <a class="float-end btn btn-sm btn-success" href="?_export=xlsx">
+            <i class="fa-solid fa-download"></i> Export to Excel
+        </a>
+        <!-- Add the single Generate Invoice button -->
+        <div class="my-3">
+            <a class="btn btn-primary" href="{% url 'generate-invoice' %}">Generate Invoice</a>
+        </div>
+        <table class="table table-sm table-responsive overflow-x-hidden" id="dtVerticalScrollExample" cellspacing="0" width="100%">
+            <thead>
+                <tr class="table-success">
+                    <th scope="col" class="th-sm">ID <i class="fa-solid fa-sort"></i></th>
+                    <th scope="col" class="th-sm">Customer <i class="fa-solid fa-sort"></i></th>
+                    <th scope="col" class="th-sm">Logistics <i class="fa-solid fa-sort"></i></th>
+                    <th scope="col" class="th-sm">Order Type <i class="fa-solid fa-sort"></i></th>
+                    <th scope="col" class="th-sm">Order Date <i class="fa-solid fa-sort"></i></th>
+                    <th scope="col" class="th-sm">Delivery Date <i class="fa-solid fa-sort"></i></th>
+                    <th scope="col" class="th-sm">Sales Order Status <i class="fa-solid fa-sort"></i></th>
+                    <th scope="col" class="th-sm">Shipping Fee <i class="fa-solid fa-sort"></i></th>
+                    <th scope="col" class="th-sm">Total Amount Due <i class="fa-solid fa-sort"></i></th>
+                    <th scope="col" class="th-sm">Payment Type <i class="fa-solid fa-sort"></i></th>
+                    <th scope="col" class="th-sm">Payment Status <i class="fa-solid fa-sort"></i></th>
+                    <th scope="col" class="th-sm">Items <i class="fa-solid fa-sort"></i></th>
+                    <th scope="col" class="th-sm">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sale in sales %}
+                <tr>
+                    <th scope="row">{{ sale.id }}</th>
+                    <td><a href="{% url 'sale-detail' sale.pk %}">{{ sale.customer_id.customer_id }} - {{ sale.customer_id.first_name }} {{ sale.customer_id.last_name }}</a></td>
+                    <td>{{ sale.logistics_id.pk_logistics_id }} - {{ sale.logistics_id.company }}</td>
+                    <td>{{ sale.order_type }}</td>
+                    <td>{{ sale.order_date }}</td>
+                    <td>{{ sale.delivery_date }}</td>
+                    <td>{{ sale.sales_order_status }}</td>
+                    <td>{{ sale.shipping_fee }}</td>
+                    <td>{{ sale.total_amount_due }}</td>
+                    <td>{{ sale.payment_type }}</td>
+                    <td class="{% if sale.payment_status == 'Paid' %}payment-status-paid{% elif sale.payment_status == 'Unpaid' %}payment-status-unpaid{% endif %}">{{ sale.payment_status }}</td>
+                    <td><a href="{% url 'salesitems-list' sale.id %}">{{ sale.items_count }}</a></td>
+                    <td>
+                        <a class="text-info update-link" href="{% url 'sale-update' sale.pk %}" data-payment-status="{{ sale.payment_status }}"><i class="fa-solid fa-pen"></i></a>
+                        <a class="text-danger float-end" href="{% url 'sale-delete' sale.pk %}"><i class="fa-solid fa-trash"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="paginator">
+            {% if is_paginated %}
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                <li><a class="btn btn-sm accent-1 btn-outline-success" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                {% else %}
+                <li class="disabled"><span class="btn btn-sm btn-outline-success">&laquo;</span></li>
+                {% endif %}
+                {% for i in paginator.page_range %}
+                {% if page_obj.number == i %}
+                <li class="active"><span class="btn btn-sm btn-success">{{ i }} <span class="sr-only">(current)</span></span></li>
+                {% else %}
+                <li><a href="?page={{ i }}" class="btn btn-sm btn-outline-success">{{ i }}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                <li><a href="?page={{ page_obj.next_page_number }}" class="btn btn-sm btn-outline-success">&raquo;</a></li>
+                {% else %}
+                <li class="disabled"><span class="btn btn-sm btn-outline-success">&raquo;</span></li>
+                {% endif %}
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

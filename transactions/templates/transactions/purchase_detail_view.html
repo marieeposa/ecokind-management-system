@@ -1,0 +1,49 @@
+<!-- transactions/templates/transactions/purchase_detail_view.html -->
+{% extends "store/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Purchase Order Items{% endblock %}
+
+{% block content %}
+<div class="col container p-5">
+    <div class="row">
+        <div class="col-md-3 col-lg-3"></div>
+        <div class="col-md-6 col-lg-6">
+            <h1>Purchase Order Items</h1>
+            <a class="btn btn-sm btn-success" href="{% url 'purchases_detail_create' pk=pk %}">Add Item</a>
+            <table class="table table-sm table-responsive mt-3">
+                <thead>
+                    <tr class="table-success">
+                        <th scope="col">ID</th>
+                        <th scope="col">Item</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Unit Price</th>
+                        <th scope="col">Subtotal</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for detail in purchase_order_details %}
+                    <tr>
+                        <td>{{ detail.purchase_order_details_id }}</td>
+                        <td>{{ detail.item.name }}</td>
+                        <td>{{ detail.description }}</td>
+                        <td>{{ detail.quantity }}</td>
+                        <td>{{ detail.unit_price }}</td>
+                        <td>{{ detail.subtotal }}</td>
+                        <td>
+                            <a class="text-info" href="{% url 'purchase_detail_update' order_pk=pk pk=detail.pk %}"><i class="fa-solid fa-pen"></i></a>
+                            <a class="text-danger float-end" href="{% url 'purchase_detail_delete' order_pk=pk pk=detail.pk %}"><i class="fa-solid fa-trash"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <a class="btn btn-sm btn-primary mt-3" href="{% url 'purchases_list' %}">Back to Purchase Orders</a>
+        </div>
+        <div class="col-md-3 col-lg-3"></div>
+    </div>
+</div>
+{% endblock content %}
